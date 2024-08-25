@@ -44,7 +44,7 @@ class Tube(pygame.sprite.Sprite):
         self.rect.center = (x, y)
         self.selected = False
         self.fill_tube(self.x, self.y)
-        print(tubes)
+
         # self.fill_tube()
 
     def fill_tube(self, x, y):
@@ -98,6 +98,7 @@ running = True
 tubes = pygame.sprite.Group()
 liquids = pygame.sprite.Group()
 create_tubes(4, 2)
+print(tubes.sprites()[0].x)
 
 
 while running:
