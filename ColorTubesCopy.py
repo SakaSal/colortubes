@@ -71,7 +71,7 @@ class Tube(pygame.sprite.Sprite):
                 holding = False
 
     def update(self):
-
+        liquids.sprites()[self.index].rect.center = self.rect.center
         self.input()
 
 
@@ -102,7 +102,7 @@ running = True
 tubes = pygame.sprite.Group()
 liquids = pygame.sprite.Group()
 create_tubes(4, 2)
-print(liquids.sprites()[4].rect.center)
+print(tubes.sprites()[4].rect.center)
 
 
 while running:
