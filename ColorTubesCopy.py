@@ -36,9 +36,10 @@ class Liquid(pygame.sprite.Sprite):
 
 class Tube(pygame.sprite.Sprite):
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, index):
         super().__init__()
         self.image, self.rect = load_image("tube.png", -1, 2)
+        self.index = index
         self.x = x
         self.y = y
         self.rect.center = (x, y)
@@ -70,19 +71,22 @@ class Tube(pygame.sprite.Sprite):
                 holding = False
 
     def update(self):
+
         self.input()
 
 
 def create_tubes(rows, columns):
+    index = 0
     w_interval = SCREEN_WIDTH / rows
     w_start = w_interval - (w_interval / 2)
     c_interval = SCREEN_HEIGHT / columns
     c_start = c_interval / 2
     for col in range(columns):
         for row in range(rows):
-            tube = Tube(w_start, c_start)
+            tube = Tube(w_start, c_start, index)
             w_start += w_interval
             tubes.add(tube)
+            index += 1
         w_start = w_interval - (w_interval / 2)
         c_start += c_interval
 
@@ -98,7 +102,7 @@ running = True
 tubes = pygame.sprite.Group()
 liquids = pygame.sprite.Group()
 create_tubes(4, 2)
-print(tubes.sprites()[0].x)
+print(liquids.sprites()[4].rect.center)
 
 
 while running:
@@ -122,5 +126,4 @@ while running:
 
     clock.tick(60)  # limits FPS to 60
 
-print(__file__[0])
 pygame.quit()
