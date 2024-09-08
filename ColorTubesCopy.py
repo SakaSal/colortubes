@@ -24,12 +24,13 @@ def load_image(name, colorkey=None, scale=1):
 
 
 class Liquid(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, index):
         colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Indigo", "Violet"]
         color = choice(colors)
         super().__init__()
         self.image = pygame.Surface((23, 15))
         self.image.fill(color)
+        self.index = index
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
@@ -44,13 +45,13 @@ class Tube(pygame.sprite.Sprite):
         self.y = y
         self.rect.center = (x, y)
         self.selected = False
-        self.fill_tube(self.x, self.y)
+        self.fill_tube(self.x, self.y, self.index)
 
         # self.fill_tube()
 
-    def fill_tube(self, x, y):
-        liquid = Liquid(x, y)
-        liquids.add(liquid)
+    def fill_tube(self, x, y, index):
+        liquid = Liquid(x, y + 22, index)
+        bottom_liquids.add(liquid)
 
     def re__init__(self, x, y):
         self.rect.center = (x, y)
@@ -71,7 +72,7 @@ class Tube(pygame.sprite.Sprite):
                 holding = False
 
     def update(self):
-        liquids.sprites()[self.index].rect.center = self.rect.center
+        bottom_liquids.sprites()[self.index].rect.midbottom = self.rect.midbottom
         self.input()
 
 
@@ -100,7 +101,7 @@ running = True
 
 
 tubes = pygame.sprite.Group()
-liquids = pygame.sprite.Group()
+bottom_liquids = pygame.sprite.Group()
 create_tubes(4, 2)
 print(tubes.sprites()[4].rect.center)
 
@@ -117,10 +118,11 @@ while running:
 
     # RENDER YOUR GAME HERE
     # update and draw tubes group
+    bottom_liquids.update()
     tubes.update()
-    liquids.update()
+    bottom_liquids.draw(screen)
     tubes.draw(screen)
-    liquids.draw(screen)
+
     # flip() the display to put your work on screen
     pygame.display.flip()
 
