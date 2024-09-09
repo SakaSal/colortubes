@@ -1,3 +1,4 @@
+from random import choice
 import os
 import pygame
 from random import choice
