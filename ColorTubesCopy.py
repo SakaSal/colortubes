@@ -68,8 +68,6 @@ class Tube(pygame.sprite.Sprite):
         self.selected = False
         self.fill_tube(self.x, self.y, self.index, (self.rect.height / 6) - 1)
 
-        # self.fill_tube()
-
     def fill_tube(self, x, y, index, height):
 
         for layer in layers:
@@ -114,8 +112,6 @@ def create_tubes(rows, columns):
         c_start += c_interval
 
 
-# pygame setup
-
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
@@ -141,17 +137,14 @@ layers = [
 
 create_tubes(4, 2)
 
-
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("grey")
-
     # RENDER YOUR GAME HERE
     # update and draw tubes group
     for item in layers:
@@ -163,7 +156,5 @@ while running:
 
     # flip() the display to put your work on screen
     pygame.display.flip()
-
     clock.tick(60)  # limits FPS to 60
-
 pygame.quit()
