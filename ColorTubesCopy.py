@@ -127,14 +127,15 @@ bottom_top_liquids = pygame.sprite.Group()
 mid_top_liquids = pygame.sprite.Group()
 top_liquids = pygame.sprite.Group()
 
-layers = [
+layers = (
     bottom_liquids,
     mid_bottom_liquids,
     top_bottom_liquids,
     bottom_top_liquids,
     mid_top_liquids,
     top_liquids,
-]
+)
+
 
 create_tubes(4, 2)
 
