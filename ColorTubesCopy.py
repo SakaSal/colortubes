@@ -1,4 +1,3 @@
-# Example file showing a basic pygame "game loop"
 import os
 import pygame
 from random import choice
@@ -24,15 +23,37 @@ def load_image(name, colorkey=None, scale=1):
 
 
 class Liquid(pygame.sprite.Sprite):
-    def __init__(self, x, y, index):
+    def __init__(self, x, y, index, height):
         colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Indigo", "Violet"]
         color = choice(colors)
         super().__init__()
-        self.image = pygame.Surface((23, 15))
+        self.image = pygame.Surface((23, height))
         self.image.fill(color)
         self.index = index
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        self.rect.midbottom = (x, y)
+
+    def update2(self):
+        for layer in layers:
+            if layer == bottom_liquids:
+                last_layer = layer
+            if self in layer:
+                self.rect.midbottom = last_layer.sprites()[self.index].rect.midtop
+                last_layer = layer
+
+    def update(self):
+        if self in bottom_liquids:
+            self.rect.midbottom = tubes.sprites()[self.index].rect.midbottom
+        elif self in mid_bottom_liquids:
+            self.rect.midbottom = bottom_liquids.sprites()[self.index].rect.midtop
+        elif self in top_bottom_liquids:
+            self.rect.midbottom = mid_bottom_liquids.sprites()[self.index].rect.midtop
+        elif self in bottom_top_liquids:
+            self.rect.midbottom = top_bottom_liquids.sprites()[self.index].rect.midtop
+        elif self in mid_top_liquids:
+            self.rect.midbottom = bottom_top_liquids.sprites()[self.index].rect.midtop
+        elif self in top_liquids:
+            self.rect.midbottom = mid_top_liquids.sprites()[self.index].rect.midtop
 
 
 class Tube(pygame.sprite.Sprite):
@@ -45,13 +66,15 @@ class Tube(pygame.sprite.Sprite):
         self.y = y
         self.rect.center = (x, y)
         self.selected = False
-        self.fill_tube(self.x, self.y, self.index)
+        self.fill_tube(self.x, self.y, self.index, (self.rect.height / 6) - 1)
 
         # self.fill_tube()
 
-    def fill_tube(self, x, y, index):
-        liquid = Liquid(x, y + 22, index)
-        bottom_liquids.add(liquid)
+    def fill_tube(self, x, y, index, height):
+
+        for layer in layers:
+            liquid = Liquid(x, y, index, height)
+            layer.add(liquid)
 
     def re__init__(self, x, y):
         self.rect.center = (x, y)
@@ -72,7 +95,6 @@ class Tube(pygame.sprite.Sprite):
                 holding = False
 
     def update(self):
-        bottom_liquids.sprites()[self.index].rect.midbottom = self.rect.midbottom
         self.input()
 
 
@@ -102,8 +124,22 @@ running = True
 
 tubes = pygame.sprite.Group()
 bottom_liquids = pygame.sprite.Group()
+mid_bottom_liquids = pygame.sprite.Group()
+top_bottom_liquids = pygame.sprite.Group()
+bottom_top_liquids = pygame.sprite.Group()
+mid_top_liquids = pygame.sprite.Group()
+top_liquids = pygame.sprite.Group()
+
+layers = [
+    bottom_liquids,
+    mid_bottom_liquids,
+    top_bottom_liquids,
+    bottom_top_liquids,
+    mid_top_liquids,
+    top_liquids,
+]
+
 create_tubes(4, 2)
-print(tubes.sprites()[4].rect.center)
 
 
 while running:
@@ -118,9 +154,11 @@ while running:
 
     # RENDER YOUR GAME HERE
     # update and draw tubes group
-    bottom_liquids.update()
+    for item in layers:
+        item.update()
     tubes.update()
-    bottom_liquids.draw(screen)
+    for item in layers:
+        item.draw(screen)
     tubes.draw(screen)
 
     # flip() the display to put your work on screen
