@@ -1,8 +1,7 @@
 from random import choice
 import os
 import pygame
-from random import choice
-from pygame.sprite import Group
+
 
 main_dir = os.path.split(os.path.abspath(__file__))[0]
 data_dir = os.path.join(main_dir, "assets")
