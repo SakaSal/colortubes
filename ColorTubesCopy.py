@@ -1,4 +1,4 @@
-from random import choice
+from random import choice, randint
 import os
 import pygame
 
@@ -58,7 +58,7 @@ class Liquid(pygame.sprite.Sprite):
 
 class Tube(pygame.sprite.Sprite):
 
-    def __init__(self, x, y, index):
+    def __init__(self, x, y, index, fill=6):
         super().__init__()
         self.image, self.rect = load_image("tube.png", -1, 2)
         self.index = index
@@ -66,11 +66,12 @@ class Tube(pygame.sprite.Sprite):
         self.y = y
         self.rect.center = (x, y)
         self.selected = False
-        self.fill_tube(self.x, self.y, self.index, (self.rect.height / 6) - 1)
+        self.fill = fill
+        self.fill_tube(self.x, self.y, self.index, (self.rect.height / 6) - 1,self.fill)
 
-    def fill_tube(self, x, y, index, height):
-
-        for layer in layers:
+    def fill_tube(self, x, y, index, height,fill=6):
+        
+        for layer in layers[0:fill]:
             liquid = Liquid(x, y, index, height)
             layer.add(liquid)
 
@@ -104,7 +105,8 @@ def create_tubes(rows, columns):
     c_start = c_interval / 2
     for col in range(columns):
         for row in range(rows):
-            tube = Tube(w_start, c_start, index)
+            fill=4
+            tube = Tube(w_start, c_start, index, fill)
             w_start += w_interval
             tubes.add(tube)
             index += 1
