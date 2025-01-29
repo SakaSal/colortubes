@@ -54,6 +54,8 @@ class Liquid(pygame.sprite.Sprite):
             self.rect.midbottom = bottom_top_liquids.sprites()[self.index].rect.midtop
         elif self in top_liquids:
             self.rect.midbottom = mid_top_liquids.sprites()[self.index].rect.midtop
+        else:
+            pass
 
 
 class Tube(pygame.sprite.Sprite):
@@ -67,11 +69,13 @@ class Tube(pygame.sprite.Sprite):
         self.y = y
         self.rect.center = (x, y)
         self.selected = False
-        self.fill = fill
-        self.fill_tube(self.x, self.y, self.index, (self.rect.height / 6) - 1,self.fill)
+        self.fill = randint(1, 6)
+        self.fill_tube(
+            self.x, self.y, self.index, (self.rect.height / 6) - 1, self.fill
+        )
 
-    def fill_tube(self, x, y, index, height,fill=6):
-        
+    def fill_tube(self, x, y, index, height, fill=6):
+
         for layer in layers[0:fill]:
             liquid = Liquid(x, y, index, height)
             layer.add(liquid)
@@ -106,8 +110,7 @@ def create_tubes(rows, columns):
     c_start = c_interval / 2
     for col in range(columns):
         for row in range(rows):
-            fill=4
-            tube = Tube(w_start, c_start, index, fill)
+            tube = Tube(w_start, c_start, index)
             w_start += w_interval
             tubes.add(tube)
             index += 1
