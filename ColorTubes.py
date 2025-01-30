@@ -1,4 +1,4 @@
-import os
+import os, sys
 from random import choice, randint
 
 import pygame
@@ -32,6 +32,11 @@ class Liquid(pygame.sprite.Sprite):
         self.index = index
         self.rect = self.image.get_rect()
         self.rect.midbottom = (x, y)
+        print(f"liquid {self.index}")
+        print(f"liquid {color}")
+
+    def __str__(self):
+        return str(self.index)
 
     def update2(self):
         for layer in layers:
@@ -42,18 +47,34 @@ class Liquid(pygame.sprite.Sprite):
                 last_layer = layer
 
     def update(self):
-        if self in bottom_liquids:
-            self.rect.midbottom = tubes.sprites()[self.index].rect.midbottom
-        elif self in mid_bottom_liquids:
-            self.rect.midbottom = bottom_liquids.sprites()[self.index].rect.midtop
-        elif self in top_bottom_liquids:
-            self.rect.midbottom = mid_bottom_liquids.sprites()[self.index].rect.midtop
-        elif self in bottom_top_liquids:
-            self.rect.midbottom = top_bottom_liquids.sprites()[self.index].rect.midtop
-        elif self in mid_top_liquids:
-            self.rect.midbottom = bottom_top_liquids.sprites()[self.index].rect.midtop
-        elif self in top_liquids:
-            self.rect.midbottom = mid_top_liquids.sprites()[self.index].rect.midtop
+        try:
+            if self in bottom_liquids:
+                part = 1
+                self.rect.midbottom = tubes.sprites()[self.index].rect.midbottom
+            elif self in mid_bottom_liquids:
+                part = 2
+                self.rect.midbottom = bottom_liquids.sprites()[self.index].rect.midtop
+            elif self in top_bottom_liquids:
+                part = 3
+                self.rect.midbottom = mid_bottom_liquids.sprites()[
+                    self.index
+                ].rect.midtop
+            elif self in bottom_top_liquids:
+                part = 4
+                self.rect.midbottom = top_bottom_liquids.sprites()[
+                    self.index
+                ].rect.midtop
+            elif self in mid_top_liquids:
+                part = 5
+                self.rect.midbottom = bottom_top_liquids.sprites()[
+                    self.index
+                ].rect.midtop
+            elif self in top_liquids:
+                part = 6
+                self.rect.midbottom = mid_top_liquids.sprites()[self.index].rect.midtop
+        except IndexError:
+            print("index", self, "groups", self.groups(), part)
+            sys.exit()
 
 
 class Tube(pygame.sprite.Sprite):
@@ -67,7 +88,8 @@ class Tube(pygame.sprite.Sprite):
         self.y = y
         self.rect.center = (x, y)
         self.selected = False
-        self.fill = fill
+        self.fill = randint(1, 6)
+        print(f"tube {self.index} with fill {self.fill}")
         self.fill_tube(
             self.x, self.y, self.index, (self.rect.height / 6) - 1, self.fill
         )
@@ -141,6 +163,11 @@ layers = (
 
 
 create_tubes(4, 2)
+
+print(tubes)
+print(len(tubes.sprites()))
+print(bottom_liquids.sprites())
+print(len(bottom_liquids.sprites()))
 
 while running:
     # poll for events
