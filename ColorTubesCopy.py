@@ -73,8 +73,6 @@ class Tube(pygame.sprite.Sprite):
         )
 
     def fill_tube(self, x, y, index, height, fill):
-        print(fill)
-
         for layer in layers[0:fill]:
             liquid = Liquid(x, y, index, height)
             layer.add(liquid)

@@ -1,5 +1,6 @@
-import os, sys
-from random import choice, randint
+import os
+import sys
+from random import choice, randint, seed
 
 import pygame
 
@@ -74,7 +75,7 @@ class Liquid(pygame.sprite.Sprite):
                 self.rect.midbottom = mid_top_liquids.sprites()[self.index].rect.midtop
         except IndexError:
             print("index", self, "groups", self.groups(), part)
-            sys.exit()
+            pass
 
 
 class Tube(pygame.sprite.Sprite):
@@ -179,8 +180,12 @@ while running:
     screen.fill("grey")
     # RENDER YOUR GAME HERE
     # update and draw tubes group
-    for item in layers:
-        item.update()
+    bottom_liquids.update()
+    mid_bottom_liquids.update()
+    top_bottom_liquids.update()
+    bottom_top_liquids.update()
+    mid_top_liquids.update()
+    top_liquids.update()
     tubes.update()
     for item in layers:
         item.draw(screen)
