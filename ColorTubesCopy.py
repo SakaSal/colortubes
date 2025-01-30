@@ -1,7 +1,7 @@
-from random import choice, randint
 import os
-import pygame
+from random import choice, randint
 
+import pygame
 
 main_dir = os.path.split(os.path.abspath(__file__))[0]
 data_dir = os.path.join(main_dir, "assets")
@@ -54,8 +54,6 @@ class Liquid(pygame.sprite.Sprite):
             self.rect.midbottom = bottom_top_liquids.sprites()[self.index].rect.midtop
         elif self in top_liquids:
             self.rect.midbottom = mid_top_liquids.sprites()[self.index].rect.midtop
-        else:
-            pass
 
 
 class Tube(pygame.sprite.Sprite):
@@ -69,12 +67,13 @@ class Tube(pygame.sprite.Sprite):
         self.y = y
         self.rect.center = (x, y)
         self.selected = False
-        self.fill = randint(1, 6)
+        self.fill = fill
         self.fill_tube(
             self.x, self.y, self.index, (self.rect.height / 6) - 1, self.fill
         )
 
-    def fill_tube(self, x, y, index, height, fill=6):
+    def fill_tube(self, x, y, index, height, fill):
+        print(fill)
 
         for layer in layers[0:fill]:
             liquid = Liquid(x, y, index, height)
