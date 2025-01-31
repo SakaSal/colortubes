@@ -1,6 +1,7 @@
 import os
-import sys
-from random import choice, randint, seed
+
+# import sys
+from random import choice, randint
 
 import pygame
 
